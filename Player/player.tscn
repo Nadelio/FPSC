@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://d6j22gnixf3o"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_qqb0j"]
+[ext_resource type="Texture2D" uid="uid://dkwvlp3vebsdj" path="res://prototype textures/purple/texture_02.png" id="2_jbpef"]
+[ext_resource type="Script" path="res://Player/CurrentSpeed.gd" id="3_6vosl"]
+[ext_resource type="Script" path="res://Player/CurrentState.gd" id="4_fbjdx"]
+[ext_resource type="Script" path="res://Player/CurrentMovement.gd" id="5_3x4xt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_csl5v"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fxxax"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kwx6d"]
+albedo_texture = ExtResource("2_jbpef")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vsplo"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1nwmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kbdmg"]
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_qqb0j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_csl5v")
+
+[node name="CharacterModel" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="CharacterModel"]
+mesh = SubResource("CapsuleMesh_fxxax")
+surface_material_override/0 = SubResource("StandardMaterial3D_kwx6d")
+
+[node name="Visor" type="MeshInstance3D" parent="CharacterModel"]
+transform = Transform3D(0.397198, 0, 0, 0, 0.487584, 0, 0, 0, 0.733732, 0, 0.75, -0.09)
+material_override = SubResource("StandardMaterial3D_vsplo")
+mesh = SubResource("BoxMesh_1nwmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_kbdmg")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+current = true
+
+[node name="HUD" type="CanvasLayer" parent="Camera3D"]
+
+[node name="CurrentSpeed" type="Label" parent="Camera3D/HUD"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Current Speed: "
+script = ExtResource("3_6vosl")
+
+[node name="CurrentState" type="Label" parent="Camera3D/HUD"]
+offset_top = 26.0
+offset_right = 113.0
+offset_bottom = 52.0
+text = "Current State: "
+script = ExtResource("4_fbjdx")
+
+[node name="CurrentMovement" type="Label" parent="Camera3D/HUD"]
+offset_top = 52.0
+offset_right = 40.0
+offset_bottom = 75.0
+text = "Current Movement: "
+script = ExtResource("5_3x4xt")
+
+[connection signal="movement" from="." to="Camera3D/HUD/CurrentMovement" method="_on_player_movement"]
+[connection signal="speed" from="." to="Camera3D/HUD/CurrentSpeed" method="_on_player_speed"]
+[connection signal="state" from="." to="Camera3D/HUD/CurrentState" method="_on_player_state"]
