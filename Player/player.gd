@@ -11,8 +11,9 @@ const ground_friction = 0.8
 const air_friction = pow(0.1, 8)
 const dash_distance = 10
 
-# get camera node
+# @onreadys
 @onready var camera = $Camera3D
+@onready var AbilityCD = $AbilityCD
 
 # signals
 signal state(state)
@@ -176,9 +177,10 @@ func _physics_process(delta):
 		slow_physics = 0
 	
 	
-	if(Input.is_action_just_pressed("ability") and (dash() == true)): # dashing and future movement logic will be here
+	if(Input.is_action_just_pressed("ability") and (dash() == true) and direction): # dashing and future movement logic will be here
 		emit_signal("movement", "dash")
 		dash_count -= 1
+		AbilityCD.start()
 		position.x += dash_distance * direction.x
 		position.z += dash_distance * direction.z
 	
@@ -190,3 +192,8 @@ func _physics_process(delta):
 	last_dir = direction # update last_dir
 	
 	move_and_slide()
+
+
+
+func _on_ability_cd_timeout():
+	dash_count = 1

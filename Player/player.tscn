@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://d6j22gnixf3o"]
+[gd_scene load_steps=13 format=3 uid="uid://d6j22gnixf3o"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_qqb0j"]
-[ext_resource type="Texture2D" uid="uid://dkwvlp3vebsdj" path="res://prototype textures/purple/texture_02.png" id="2_jbpef"]
+[ext_resource type="Texture2D" uid="uid://dkwvlp3vebsdj" path="res://purple/texture_02.png" id="2_jbpef"]
 [ext_resource type="Script" path="res://Player/CurrentSpeed.gd" id="3_6vosl"]
 [ext_resource type="Script" path="res://Player/CurrentState.gd" id="4_fbjdx"]
 [ext_resource type="Script" path="res://Player/CurrentMovement.gd" id="5_3x4xt"]
+[ext_resource type="Script" path="res://Player/AbilityCooldown.gd" id="6_8255y"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_csl5v"]
 
@@ -64,6 +65,18 @@ offset_bottom = 75.0
 text = "Current Movement: "
 script = ExtResource("5_3x4xt")
 
+[node name="AbilityCooldown" type="Label" parent="Camera3D/HUD"]
+offset_top = 78.0
+offset_right = 139.0
+offset_bottom = 104.0
+text = "Ability Cooldown: "
+script = ExtResource("6_8255y")
+
+[node name="AbilityCD" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="movement" from="." to="Camera3D/HUD/CurrentMovement" method="_on_player_movement"]
 [connection signal="speed" from="." to="Camera3D/HUD/CurrentSpeed" method="_on_player_speed"]
 [connection signal="state" from="." to="Camera3D/HUD/CurrentState" method="_on_player_state"]
+[connection signal="timeout" from="AbilityCD" to="." method="_on_ability_cd_timeout"]

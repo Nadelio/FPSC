@@ -1,2 +1,4 @@
 res://World/environment.tscn
 res://Player/player.gd
+res://Player/player.tscn
+res://Player/AbilityCooldown.gd
