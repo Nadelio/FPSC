@@ -80,16 +80,17 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 		velocity.z -= air_friction * delta
 		velocity.x -= air_friction * delta
-
+	
 	# handles jumping and double jumping
 	if Input.is_action_just_pressed("jump") and is_on_floor(): #jump logic
 		emit_signal("movement", "jump")
 		velocity.y += JUMP_VELOCITY
+	
 	if(Input.is_action_just_pressed('jump') and (is_on_floor() == false) and (double_jump() == true)): # double jump logic
 		emit_signal("movement", "double jump")
 		velocity.y += JUMP_VELOCITY
 		jump_count -= 1
-
+	
 	# get the input direction and handle the movement
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back") # Input.get_vector(-x, +x, -y, +y, deadzone) #dead zone range is 0 to 1 and is a float
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -192,8 +193,6 @@ func _physics_process(delta):
 	last_dir = direction # update last_dir
 	
 	move_and_slide()
-
-
 
 func _on_ability_cd_timeout():
 	dash_count = 1
