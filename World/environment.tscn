@@ -1,8 +1,8 @@
 [gd_scene load_steps=28 format=3 uid="uid://ba0uhdjw72jkf"]
 
 [ext_resource type="PackedScene" uid="uid://d6j22gnixf3o" path="res://Player/player.tscn" id="1_s5tqi"]
-[ext_resource type="Texture2D" uid="uid://cwp76o7vov0sg" path="res://prototype textures/light/texture_12.png" id="1_stmhj"]
-[ext_resource type="Texture2D" uid="uid://xtavp11k5sw8" path="res://prototype textures/orange/texture_03.png" id="2_6mmmh"]
+[ext_resource type="Texture2D" uid="uid://cwp76o7vov0sg" path="res://light/texture_12.png" id="1_stmhj"]
+[ext_resource type="Texture2D" uid="uid://xtavp11k5sw8" path="res://orange/texture_03.png" id="2_6mmmh"]
 [ext_resource type="Script" path="res://World/MovingSquare.gd" id="2_tgfai"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7risv"]
