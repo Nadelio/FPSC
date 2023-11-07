@@ -131,12 +131,12 @@ func _physics_process(delta):
 		velocity.z = direction.z * CROUCH_SPEED * delta
 		
 	elif(is_sprinting() and direction): # spriting processes
-		if(gain_speed >= gain_speed_threshold):
+		if(gain_speed >= gain_speed_threshold): # change to flow state
 			emit_signal("state", "flow sprinting")
 			velocity.x += direction.x * SPEED * delta
 			velocity.z += direction.z * SPEED * delta
 			gain_speed = gain_speed_threshold
-		else:
+		else: # change to normal state
 			emit_signal("state", "sprinting")
 			velocity.x = direction.x * SPRINT_SPEED * delta
 			velocity.z = direction.z * SPRINT_SPEED * delta
