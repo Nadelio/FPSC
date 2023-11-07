@@ -1,8 +1,9 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1699305034
+::res://::1699380359
+CREDITFORASSETS.txt::TextFile::-1::1699380124::0::1::::<><>::
 export_presets.cfg::TextFile::-1::1699304988::0::1::::<><>::
 README.md::TextFile::-1::1699304988::0::1::::<><>::
-::res://dark/::1699304988
+::res://dark/::1699305036
 texture_02.png::CompressedTexture2D::3362913094395168658::1699304988::1699305036::1::::<><>::
 texture_03.png::CompressedTexture2D::223185127443360502::1699304988::1699305036::1::::<><>::
 texture_04.png::CompressedTexture2D::4620060423585802343::1699304988::1699305036::1::::<><>::
@@ -15,7 +16,7 @@ texture_10.png::CompressedTexture2D::3324056014305504961::1699304988::1699305036
 texture_11.png::CompressedTexture2D::5598915161722407053::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::782678175886041495::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::7424774144539869435::1699304988::1699305036::1::::<><>::
-::res://light/::1699304988
+::res://light/::1699305036
 texture_01 (2).png::CompressedTexture2D::6955234303993385820::1699304988::1699305036::1::::<><>::
 texture_01.png::CompressedTexture2D::6979889758504269645::1699304988::1699305036::1::::<><>::
 texture_02.png::CompressedTexture2D::1157911753557536566::1699304988::1699305036::1::::<><>::
@@ -30,7 +31,7 @@ texture_10.png::CompressedTexture2D::7828207481393867854::1699304988::1699305036
 texture_11.png::CompressedTexture2D::1734562928065083141::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::6349960682847740662::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::7823811299090795313::1699304988::1699305036::1::::<><>::
-::res://orange/::1699304988
+::res://orange/::1699305036
 texture_01.png::CompressedTexture2D::5332219589877418032::1699304988::1699305036::1::::<><>::
 texture_02.png::CompressedTexture2D::7305035291050227155::1699304988::1699305036::1::::<><>::
 texture_03.png::CompressedTexture2D::1653604911884935461::1699304988::1699305036::1::::<><>::
@@ -49,8 +50,8 @@ CurrentMovement.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
 CurrentSpeed.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
 CurrentState.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
 player.gd::GDScript::-1::1699304988::0::1::::<>CharacterBody3D<>::
-player.tscn::PackedScene::275158338661822898::1699304988::0::1::::<><>::res://Player/player.gd<>uid://dkwvlp3vebsdj::::res://prototype textures/purple/texture_02.png<>res://Player/CurrentSpeed.gd<>res://Player/CurrentState.gd<>res://Player/CurrentMovement.gd
-::res://purple/::1699304988
+player.tscn::PackedScene::275158338661822898::1699304988::0::1::::<><>::res://Player/player.gd<>uid://dkwvlp3vebsdj
+::res://purple/::1699305036
 texture_01.png::CompressedTexture2D::7113924761879000876::1699304988::1699305036::1::::<><>::
 texture_02.png::CompressedTexture2D::7907862330694316959::1699304988::1699305036::1::::<><>::
 texture_03.png::CompressedTexture2D::8056530293585706453::1699304988::1699305036::1::::<><>::
@@ -64,6 +65,6 @@ texture_10.png::CompressedTexture2D::5605667822211845535::1699304988::1699305036
 texture_11.png::CompressedTexture2D::6201701273647090233::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::7013403203501010990::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::2322148352126628805::1699304988::1699305036::1::::<><>::
-::res://World/::1699304988
-environment.tscn::PackedScene::2439257140473963221::1699304988::0::1::::<><>::uid://d6j22gnixf3o::::res://Player/player.tscn<>uid://cwp76o7vov0sg::::res://prototype textures/light/texture_12.png<>uid://xtavp11k5sw8::::res://prototype textures/orange/texture_03.png<>res://World/MovingSquare.gd
+::res://World/::1699305040
+environment.tscn::PackedScene::2439257140473963221::1699305040::0::1::::<><>::uid://d6j22gnixf3o::::res://Player/player.tscn<>uid://cwp76o7vov0sg::::res://light/texture_12.png<>uid://xtavp11k5sw8::::res://orange/texture_03.png<>res://World/MovingSquare.gd
 MovingSquare.gd::GDScript::-1::1699304988::0::1::::<>RigidBody3D<>::

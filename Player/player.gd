@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-
+# constants
 const SPEED = 5
 const WALK_SPEED = 300
 const CROUCH_SPEED = 200
@@ -11,8 +11,10 @@ const ground_friction = 0.8
 const air_friction = pow(0.1, 8)
 const dash_distance = 10
 
+# get camera node
 @onready var camera = $Camera3D
 
+# signals
 signal state(state)
 signal speed(current_speed)
 signal movement(movement)
@@ -20,6 +22,7 @@ signal movement(movement)
 # get the gravity from the project settings to be synced with RigidBody nodes
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+# misc varables
 var slow_physics = 0
 var jump_count = 0
 var dash_count = 1
@@ -28,6 +31,7 @@ var mouse_sense = 0.1
 var gain_speed = 0
 var gain_speed_threshold = 5
 
+# direction vectors
 var last_dir = Vector3()
 var direction = Vector3()
 
@@ -49,38 +53,38 @@ func double_jump(): # double jump logic
 	else:
 		return false
 
-func dash():
+func dash(): # dash logic
 	if(dash_count == 1):
 		return true
 	else:
 		return false
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) # capture mouse
 
 func _input(event):
 	#get mouse input for camera rotation
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion: # credit to Garbaj
 		rotate_y(deg_to_rad(-event.relative.x * mouse_sense))
 		camera.rotate_x(deg_to_rad(-event.relative.y * mouse_sense))
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
-func _process(delta):
+func _process(_delta): # currently unused
 	pass
 
 func _physics_process(delta):
-	emit_signal("speed", velocity)
+	emit_signal("speed", velocity) # update CurrentSpeed label
 	# adds gravity
-	if not is_on_floor():
+	if not is_on_floor(): # in air check
 		velocity.y -= gravity * delta
 		velocity.z -= air_friction * delta
 		velocity.x -= air_friction * delta
 
 	# handles jumping and double jumping
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor(): #jump logic
 		emit_signal("movement", "jump")
 		velocity.y += JUMP_VELOCITY
-	if(Input.is_action_just_pressed('jump') and (is_on_floor() == false) and (double_jump() == true)):
+	if(Input.is_action_just_pressed('jump') and (is_on_floor() == false) and (double_jump() == true)): # double jump logic
 		emit_signal("movement", "double jump")
 		velocity.y += JUMP_VELOCITY
 		jump_count -= 1
@@ -91,14 +95,14 @@ func _physics_process(delta):
 	# changes the direction, transform.basis is basically the default axis that things are set on, they do not change on their own, you can change them though {x, y, z}
 	# comment for line 26: this line specifically gets the directions from line 22 and applies them to the character's transform, then normalizes it, aka "apply transforms" in blender
 
-	# HANDLES ALL MOVEMENT SPEED
+	# handles all basic movement types
 	if(is_sliding() and direction): # sliding processes
-		if(gain_speed >= gain_speed_threshold):
+		if(gain_speed >= gain_speed_threshold): # change to flow state
 			emit_signal("state", "flow sliding")
 			velocity.x += direction.x * SPEED * delta
 			velocity.z += direction.z * SPEED * delta
 			gain_speed = gain_speed_threshold
-		else:
+		else: # change to normal state
 			emit_signal("state", "sliding")
 			velocity.x = direction.x * SLIDE_SPEED * delta
 			velocity.z = direction.z * SLIDE_SPEED * delta
@@ -165,23 +169,24 @@ func _physics_process(delta):
 	if(is_on_floor()): #refresh double jump
 		jump_count = 1
 	
-	if(slow_physics == slow_clamp):
+	if(slow_physics == slow_clamp): # slow physics processes
 		if(is_on_floor() and (is_sliding() == false)): # subtract ground friction
 			velocity.x += -1 * ground_friction * direction.x * delta # -1 * 0.7 * -1 or 0 or +1
 			velocity.z += -1 * ground_friction * direction.z * delta # -1 * 0.7 * -1 or 0 or +1
 		slow_physics = 0
 	
 	
-	if(Input.is_action_just_pressed("ability") and (dash() == true)):
+	if(Input.is_action_just_pressed("ability") and (dash() == true)): # dashing and future movement logic will be here
 		emit_signal("movement", "dash")
+		dash_count -= 1
 		position.x += dash_distance * direction.x
 		position.z += dash_distance * direction.z
 	
 	slow_physics += 1
 	
-	if(velocity == Vector3(0, 0, 0)):
+	if(velocity == Vector3.ZERO): # not moving check
 		emit_signal("state", "not moving")
 	
-	last_dir = direction
+	last_dir = direction # update last_dir
 	
 	move_and_slide()
