@@ -9,11 +9,11 @@ const SLIDE_SPEED = 500
 const JUMP_VELOCITY = 6
 const ground_friction = 0.8
 const air_friction = pow(0.1, 8)
-const dash_distance = 10
 
 # @onreadys
 @onready var camera = $Camera3D
 @onready var AbilityCD = $AbilityCD
+@onready var DashCheck = $DashCollideCheck
 
 # signals
 signal state(state)
@@ -31,6 +31,7 @@ var slow_clamp = 5
 var mouse_sense = 0.1
 var gain_speed = 0
 var gain_speed_threshold = 5
+var dashDistance = 10
 
 # direction vectors
 var last_dir = Vector3()
@@ -62,6 +63,9 @@ func dash(): # dash logic
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) # capture mouse
+	DashCheck.exclude_parent = true
+	DashCheck.collide_with_areas = true
+	DashCheck.collide_with_bodies = true
 
 func _input(event):
 	#get mouse input for camera rotation
@@ -177,13 +181,17 @@ func _physics_process(delta):
 			velocity.z += -1 * ground_friction * direction.z * delta # -1 * 0.7 * -1 or 0 or +1
 		slow_physics = 0
 	
-	
 	if(Input.is_action_just_pressed("ability") and (dash() == true) and direction): # dashing and future movement logic will be here
+		if(DashCheck.is_colliding()):
+			var origin = DashCheck.global_transform.origin
+			var collision_point = DashCheck.get_collision_point()
+			dashDistance = origin.distance_to(collision_point)
+		
+		position.x += dashDistance * direction.x
+		position.z += dashDistance * direction.z
 		emit_signal("movement", "dash")
 		dash_count -= 1
 		AbilityCD.start()
-		position.x += dash_distance * direction.x
-		position.z += dash_distance * direction.z
 	
 	slow_physics += 1
 	

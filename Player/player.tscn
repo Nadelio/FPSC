@@ -76,6 +76,9 @@ script = ExtResource("6_8255y")
 wait_time = 5.0
 one_shot = true
 
+[node name="DashCollideCheck" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-07, -1, 0, 10, -4.37114e-08, 0, 0, -0.500069)
+
 [connection signal="movement" from="." to="Camera3D/HUD/CurrentMovement" method="_on_player_movement"]
 [connection signal="speed" from="." to="Camera3D/HUD/CurrentSpeed" method="_on_player_speed"]
 [connection signal="state" from="." to="Camera3D/HUD/CurrentState" method="_on_player_state"]
