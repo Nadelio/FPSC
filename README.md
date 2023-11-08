@@ -1,6 +1,6 @@
 # FPSC
 Current Features:
-- Dashing (Clips through blocks, planned fix)
+- Dashing
 - Sprinting 
 - Sliding (Speed)
 - Crouching (Speed)
@@ -15,6 +15,7 @@ Planned Features:
 - Wall Running
 - Wall Climbing
 - Movement Animations
+- Basic Player Model
 - Basic Gun
 - Bigger Testing Map
 - Grapple Hook
