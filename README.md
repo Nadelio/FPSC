@@ -4,7 +4,7 @@ Current Features:
 - Sprinting 
 - Sliding (Speed)
 - Crouching (Speed)
-- Jumping
+- Jumping (Bug when sliding/sprinting; WIP)
 - Double Jumping
 - Super Jump (Scroll wheel up quickly)
 - Camera Control
