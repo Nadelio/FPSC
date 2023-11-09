@@ -102,7 +102,7 @@ func _physics_process(delta):
 	# comment for line 26: this line specifically gets the directions from line 22 and applies them to the character's transform, then normalizes it, aka "apply transforms" in blender
 
 	# handles all basic movement types
-	if(is_sliding() and direction): # sliding processes
+	if(is_sliding()): # sliding processes
 		if(gain_speed >= gain_speed_threshold): # change to flow state
 			emit_signal("state", "flow sliding")
 			velocity.x += direction.x * SPEED * delta
@@ -112,14 +112,6 @@ func _physics_process(delta):
 			emit_signal("state", "sliding")
 			velocity.x = direction.x * SLIDE_SPEED * delta
 			velocity.z = direction.z * SLIDE_SPEED * delta
-	
-		if(gain_speed < 0):
-			gain_speed = 0
-		
-		if(last_dir == direction):
-			gain_speed += 1
-		else:
-			gain_speed -= 1
 		
 		if(velocity.x > 55):
 			velocity.x = 55
@@ -130,12 +122,12 @@ func _physics_process(delta):
 		elif(velocity.z < -55):
 			velocity.z = -55
 		
-	elif(is_crouched() and direction): # crouching processes
+	elif(is_crouched()): # crouching processes
 		emit_signal("state", "crouching")
 		velocity.x = direction.x * CROUCH_SPEED * delta
 		velocity.z = direction.z * CROUCH_SPEED * delta
 		
-	elif(is_sprinting() and direction): # spriting processes
+	elif(is_sprinting()): # spriting processes
 		if(gain_speed >= gain_speed_threshold): # change to flow state
 			emit_signal("state", "flow sprinting")
 			velocity.x += direction.x * SPEED * delta
@@ -145,14 +137,6 @@ func _physics_process(delta):
 			emit_signal("state", "sprinting")
 			velocity.x = direction.x * SPRINT_SPEED * delta
 			velocity.z = direction.z * SPRINT_SPEED * delta
-	
-		if(gain_speed < 0):
-			gain_speed = 0
-		
-		if(last_dir == direction):
-			gain_speed += 1
-		else:
-			gain_speed -= 1
 		
 		if(velocity.x > 25):
 			velocity.x = 25
@@ -197,6 +181,14 @@ func _physics_process(delta):
 	
 	if(velocity == Vector3.ZERO): # not moving check
 		emit_signal("state", "not moving")
+	
+	if(gain_speed < 0):
+		gain_speed = 0
+	
+	if(last_dir == direction):
+		gain_speed += 1
+	else:
+		gain_speed -= 1
 	
 	last_dir = direction # update last_dir
 	
