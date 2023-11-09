@@ -1,4 +1,4 @@
-# FPSC
+# First-Person Movement-Shooter Character COntroller
 Current Features:
 - Dashing
 - Sprinting 
