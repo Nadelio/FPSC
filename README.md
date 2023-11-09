@@ -1,4 +1,4 @@
-# First-Person Movement-Shooter Character COntroller
+# First-Person Movement-Shooter Character Controller
 Current Features:
 - Dashing
 - Sprinting 
