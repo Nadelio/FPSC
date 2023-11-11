@@ -92,7 +92,7 @@ func _physics_process(delta):
 	
 	if(Input.is_action_just_pressed('jump') and (is_on_floor() == false) and (double_jump() == true)): # double jump logic
 		emit_signal("movement", "double jump")
-		velocity.y += JUMP_VELOCITY
+		velocity.y = velocity.y * 0 + JUMP_VELOCITY + JUMP_VELOCITY
 		jump_count -= 1
 	
 	# get the input direction and handle the movement
@@ -166,7 +166,7 @@ func _physics_process(delta):
 		slow_physics = 0
 	
 	if(Input.is_action_just_pressed("ability") and (dash() == true) and direction): # dashing and future movement logic will be here
-		if(DashCheck.is_colliding()):
+		if(DashCheck.is_colliding()): # make sure to increase the length of DashCheck raycast, dash needs to be increased
 			var origin = DashCheck.global_transform.origin
 			var collision_point = DashCheck.get_collision_point()
 			dashDistance = origin.distance_to(collision_point)
