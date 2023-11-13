@@ -14,6 +14,8 @@ const air_friction = pow(0.1, 8)
 @onready var camera = $Camera3D
 @onready var AbilityCD = $AbilityCD
 @onready var DashCheck = $DashCollideCheck
+@onready var WallCheck1 = $WallCheck1
+@onready var WallCheck2 = $WallCheck2
 
 # signals
 signal state(state)
@@ -24,6 +26,7 @@ signal movement(movement)
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # misc varables
+var current_speed = 0
 var slow_physics = 0
 var jump_count = 0
 var dash_count = 1
@@ -32,10 +35,13 @@ var mouse_sense = 0.1
 var gain_speed = 0
 var gain_speed_threshold = 5
 var dashDistance = 10
+var origin
+var collision_point
 
 # direction vectors
 var last_dir = Vector3()
 var direction = Vector3()
+
 
 func is_crouched(): # check if crouching
 	if(Input.is_action_pressed("crouch")):
@@ -47,6 +53,14 @@ func is_sprinting(): # check if sprinting
 
 func is_sliding(): # check if sliding
 	if(is_sprinting() and is_crouched()):
+		return true
+
+func wall_connect():
+	if(WallCheck1.is_colliding() or WallCheck2.is_colliding()):
+		return true
+
+func is_wall_running():
+	if(is_on_wall() and (velocity.x >= 8 or velocity.z >= 8)):
 		return true
 
 func double_jump(): # double jump logic
@@ -78,7 +92,8 @@ func _process(_delta): # currently unused
 	pass
 
 func _physics_process(delta):
-	emit_signal("speed", velocity) # update CurrentSpeed label
+	current_speed = sqrt(pow(velocity.x, 2) + pow(velocity.z, 2))
+	emit_signal("speed", current_speed) # update CurrentSpeed label
 	# adds gravity
 	if not is_on_floor(): # in air check
 		velocity.y -= gravity * delta
@@ -118,7 +133,7 @@ func _physics_process(delta):
 		elif(velocity.x < -55):
 			velocity.x = -55
 		if(velocity.z > 55):
-			velocity.z = 55
+			velocity.z = 55 
 		elif(velocity.z < -55):
 			velocity.z = -55
 		
@@ -167,8 +182,8 @@ func _physics_process(delta):
 	
 	if(Input.is_action_just_pressed("ability") and (dash() == true) and direction): # dashing and future movement logic will be here
 		if(DashCheck.is_colliding()): # make sure to increase the length of DashCheck raycast, dash needs to be increased
-			var origin = DashCheck.global_transform.origin
-			var collision_point = DashCheck.get_collision_point()
+			origin = DashCheck.global_transform.origin
+			collision_point = DashCheck.get_collision_point()
 			dashDistance = origin.distance_to(collision_point)
 		
 		position.x += dashDistance * direction.x
@@ -176,6 +191,10 @@ func _physics_process(delta):
 		emit_signal("movement", "dash")
 		dash_count -= 1
 		AbilityCD.start()
+	
+	if(is_wall_running()):
+		emit_signal("state", "wall running")
+		# add stick code here + flow state
 	
 	slow_physics += 1
 	
