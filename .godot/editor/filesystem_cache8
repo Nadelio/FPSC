@@ -1,5 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1699903280
+::res://::1700079717
 CREDITFORASSETS.txt::TextFile::-1::1699380124::0::1::::<><>::
 export_presets.cfg::TextFile::-1::1699558278::0::1::::<><>::
 README.md::TextFile::-1::1699901198::0::1::::<><>::
@@ -16,8 +16,7 @@ texture_10.png::CompressedTexture2D::3324056014305504961::1699304988::1699305036
 texture_11.png::CompressedTexture2D::5598915161722407053::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::782678175886041495::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::7424774144539869435::1699304988::1699305036::1::::<><>::
-::res://light/::1699305036
-texture_01 (2).png::CompressedTexture2D::6955234303993385820::1699304988::1699305036::1::::<><>::
+::res://light/::1699905546
 texture_01.png::CompressedTexture2D::6979889758504269645::1699304988::1699305036::1::::<><>::
 texture_02.png::CompressedTexture2D::1157911753557536566::1699304988::1699305036::1::::<><>::
 texture_03.png::CompressedTexture2D::1489229281864500558::1699304988::1699305036::1::::<><>::
@@ -45,13 +44,13 @@ texture_10.png::CompressedTexture2D::373214125024668591::1699304988::1699305036:
 texture_11.png::CompressedTexture2D::3105627883901600364::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::260047131296538746::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::5366711959155745671::1699304988::1699305036::1::::<><>::
-::res://Player/::1699901198
+::res://Player/::1699909861
 AbilityCooldown.gd::GDScript::-1::1699382117::0::1::::<>Label<>::
 CurrentMovement.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
 CurrentSpeed.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
 CurrentState.gd::GDScript::-1::1699304988::0::1::::<>Label<>::
-player.gd::GDScript::-1::1699901198::0::1::::<>CharacterBody3D<>::
-player.tscn::PackedScene::275158338661822898::1699564097::0::1::::<><>::res://Player/player.gd<>uid://dkwvlp3vebsdj::::res://purple/texture_02.png<>res://Player/CurrentSpeed.gd<>res://Player/CurrentState.gd<>res://Player/CurrentMovement.gd<>res://Player/AbilityCooldown.gd
+player.gd::GDScript::-1::1699909839::0::1::::<>CharacterBody3D<>::
+player.tscn::PackedScene::275158338661822898::1699909861::0::1::::<><>::res://Player/player.gd<>uid://dkwvlp3vebsdj::::res://purple/texture_02.png<>res://Player/CurrentSpeed.gd<>res://Player/CurrentState.gd<>res://Player/CurrentMovement.gd<>res://Player/AbilityCooldown.gd
 ::res://purple/::1699305036
 texture_01.png::CompressedTexture2D::7113924761879000876::1699304988::1699305036::1::::<><>::
 texture_02.png::CompressedTexture2D::7907862330694316959::1699304988::1699305036::1::::<><>::
@@ -66,6 +65,6 @@ texture_10.png::CompressedTexture2D::5605667822211845535::1699304988::1699305036
 texture_11.png::CompressedTexture2D::6201701273647090233::1699304988::1699305036::1::::<><>::
 texture_12.png::CompressedTexture2D::7013403203501010990::1699304988::1699305036::1::::<><>::
 texture_13.png::CompressedTexture2D::2322148352126628805::1699304988::1699305036::1::::<><>::
-::res://World/::1699564276
-environment.tscn::PackedScene::2439257140473963221::1699564276::0::1::::<><>::uid://d6j22gnixf3o::::res://Player/player.tscn<>uid://cwp76o7vov0sg::::res://light/texture_12.png<>uid://xtavp11k5sw8::::res://orange/texture_03.png<>res://World/MovingSquare.gd
+::res://World/::1699909735
+environment.tscn::PackedScene::2439257140473963221::1699909735::0::1::::<><>::uid://d6j22gnixf3o::::res://Player/player.tscn<>uid://cwp76o7vov0sg::::res://light/texture_12.png<>uid://xtavp11k5sw8::::res://orange/texture_03.png<>res://World/MovingSquare.gd
 MovingSquare.gd::GDScript::-1::1699304988::0::1::::<>RigidBody3D<>::

@@ -77,7 +77,7 @@ wait_time = 5.0
 one_shot = true
 
 [node name="DashCollideCheck" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-07, -1, 0, 10, -4.37114e-08, 0, 0, -0.500069)
+transform = Transform3D(1, 0, 0, 0, -6.55671e-07, -1, 0, 15, -4.37114e-08, 0, 0, -0.500069)
 
 [node name="WallCheck1" type="RayCast3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)

@@ -16,6 +16,7 @@ const air_friction = pow(0.1, 8)
 @onready var DashCheck = $DashCollideCheck
 @onready var WallCheck1 = $WallCheck1
 @onready var WallCheck2 = $WallCheck2
+@onready var WallCheck = $WallCheck1# temporary assignment, will be changed by code
 
 # signals
 signal state(state)
@@ -37,6 +38,7 @@ var gain_speed_threshold = 5
 var dashDistance = 10
 var origin
 var collision_point
+var wall_angle
 
 # direction vectors
 var last_dir = Vector3()
@@ -59,8 +61,30 @@ func wall_connect():
 	if(WallCheck1.is_colliding() or WallCheck2.is_colliding()):
 		return true
 
+func update_wall_angle():
+	if(WallCheck1.is_colliding()):
+		WallCheck = WallCheck1 # change WallCheck to WallCheck1
+	elif(WallCheck2.is_colliding()):
+		WallCheck = WallCheck2 # change WallCheck to WallCheck2
+	
+	if(WallCheck.is_colliding()):
+		# update hypotenuse length
+		origin = DashCheck.global_transform.origin
+		collision_point = DashCheck.get_collision_point()
+		var hypotenuse = origin.distance_to(collision_point)
+		
+		# update adjacent length
+		origin = DashCheck.global_transform.origin
+		collision_point = WallCheck.get_collision_point()
+		var adjacent = origin.distance_to(collision_point)
+		
+		# update wall_angle
+		wall_angle = rad_to_deg(cos(adjacent/hypotenuse))
+		print(wall_angle)
+		return wall_angle
+
 func is_wall_running():
-	if(is_on_wall() and (velocity.x >= 8 or velocity.z >= 8)):
+	if(is_on_wall()):
 		return true
 
 func double_jump(): # double jump logic
@@ -92,8 +116,11 @@ func _process(_delta): # currently unused
 	pass
 
 func _physics_process(delta):
-	current_speed = sqrt(pow(velocity.x, 2) + pow(velocity.z, 2))
+	update_wall_angle()
+	
+	current_speed = sqrt(pow(velocity.x, 2) + pow(velocity.z, 2)) # update current speed
 	emit_signal("speed", current_speed) # update CurrentSpeed label
+	
 	# adds gravity
 	if not is_on_floor(): # in air check
 		velocity.y -= gravity * delta
@@ -107,7 +134,10 @@ func _physics_process(delta):
 	
 	if(Input.is_action_just_pressed('jump') and (is_on_floor() == false) and (double_jump() == true)): # double jump logic
 		emit_signal("movement", "double jump")
-		velocity.y = velocity.y * 0 + JUMP_VELOCITY + JUMP_VELOCITY
+		if(velocity.y < 0):
+			velocity.y = velocity.y * 0 + JUMP_VELOCITY + JUMP_VELOCITY
+		else:
+			velocity.y += JUMP_VELOCITY
 		jump_count -= 1
 	
 	# get the input direction and handle the movement
@@ -171,7 +201,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, ground_friction) # move_toward() is like lerp but https://ask.godotengine.org/81798/difference-between-move_toward-and-lerp
 		velocity.z = move_toward(velocity.z, 0, ground_friction) # lines 46 & 47 are smoothly turning down the speed of the player
 	
-	if(is_on_floor()): #refresh double jump
+	if(is_on_floor() or is_on_wall()): #refresh double jump
 		jump_count = 1
 	
 	if(slow_physics == slow_clamp): # slow physics processes
@@ -181,20 +211,27 @@ func _physics_process(delta):
 		slow_physics = 0
 	
 	if(Input.is_action_just_pressed("ability") and (dash() == true) and direction): # dashing and future movement logic will be here
-		if(DashCheck.is_colliding()): # make sure to increase the length of DashCheck raycast, dash needs to be increased
+		if(DashCheck.is_colliding()): # update dashdistance
 			origin = DashCheck.global_transform.origin
 			collision_point = DashCheck.get_collision_point()
 			dashDistance = origin.distance_to(collision_point)
 		
-		position.x += dashDistance * direction.x
-		position.z += dashDistance * direction.z
+		position.x += dashDistance * direction.x # move dash distance
+		position.z += dashDistance * direction.z # move dash distance
 		emit_signal("movement", "dash")
-		dash_count -= 1
-		AbilityCD.start()
+		dash_count -= 1 # remove the ability to dash
+		AbilityCD.start() # start CD
 	
-	if(is_wall_running()):
-		emit_signal("state", "wall running")
-		# add stick code here + flow state
+	if(is_wall_running() and wall_angle > 30 and wall_angle < 65): # wall running processes
+		if(direction): # emit signal for wall running
+			emit_signal("state", "wall running")
+		if(!direction): # emit signal for wall hanging
+			emit_signal("stae", "wall hanging")
+		
+		var wall_normal = get_slide_collision(0).get_normal() # get the wall vectors
+		velocity.y = 0 # stop downward and upward movement
+		direction.x = -wall_normal.x * SPEED * delta # move in wall vector directions
+		direction.z = -wall_normal.z * SPEED * delta # move in wall vector directions
 	
 	slow_physics += 1
 	
