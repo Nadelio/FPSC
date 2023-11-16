@@ -224,7 +224,7 @@ func _physics_process(delta):
 		if(direction): # emit signal for wall running
 			emit_signal("state", "wall running")
 		if(!direction): # emit signal for wall hanging
-			emit_signal("stae", "wall hanging")
+			emit_signal("state", "wall hanging")
 		
 		var wall_normal = get_slide_collision(0).get_normal() # get the wall vectors
 		velocity.y = 0 # stop downward and upward movement
