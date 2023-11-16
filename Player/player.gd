@@ -16,7 +16,7 @@ const air_friction = pow(0.1, 8)
 @onready var DashCheck = $DashCollideCheck
 @onready var WallCheck1 = $WallCheck1
 @onready var WallCheck2 = $WallCheck2
-@onready var WallCheck = $WallCheck1# temporary assignment, will be changed by code
+@onready var WallCheck = $WallCheck1 # temporary assignment, will be changed by code
 
 # signals
 signal state(state)
@@ -83,10 +83,6 @@ func update_wall_angle():
 		print(wall_angle)
 		return wall_angle
 
-func is_wall_running():
-	if(is_on_wall()):
-		return true
-
 func double_jump(): # double jump logic
 	if(jump_count == 1):
 		return true
@@ -98,6 +94,8 @@ func dash(): # dash logic
 		return true
 	else:
 		return false
+
+# func flow_state(speed_clamp, flow, norm, norm_speed): # add flow state code
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) # capture mouse
@@ -222,7 +220,7 @@ func _physics_process(delta):
 		dash_count -= 1 # remove the ability to dash
 		AbilityCD.start() # start CD
 	
-	if(is_wall_running() and wall_angle > 30 and wall_angle < 65): # wall running processes
+	if(is_on_wall() and wall_angle > 30 and wall_angle < 65): # wall running processes
 		if(direction): # emit signal for wall running
 			emit_signal("state", "wall running")
 		if(!direction): # emit signal for wall hanging
