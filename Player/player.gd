@@ -6,6 +6,7 @@ const WALK_SPEED = 300
 const CROUCH_SPEED = 200
 const SPRINT_SPEED = 400
 const SLIDE_SPEED = 500
+const WALL_RUN_SPEED = 500
 const JUMP_VELOCITY = 6
 const ground_friction = 0.8
 const air_friction = pow(0.1, 8)
@@ -95,7 +96,45 @@ func dash(): # dash logic
 	else:
 		return false
 
-# func flow_state(speed_clamp, flow, norm, norm_speed): # add flow state code
+func flow_state(speed_clamp, flow, norm, norm_speed): # flow_state function
+	if(gain_speed >= gain_speed_threshold): # change to flow state
+		emit_signal("state", flow)
+		velocity.x += direction.x * SPEED * delta
+		velocity.z += direction.z * SPEED * delta
+		gain_speed = gain_speed_threshold
+	else: # change to normal state
+		emit_signal("state", norm)
+		velocity.x = direction.x * norm_speed * delta
+		velocity.z = direction.z * norm_speed * delta
+
+	# speed limit code
+	if(velocity.x > speed_clamp):
+		velocity.x = speed_clamp
+	elif(velocity.x < -speed_clamp):
+		velocity.x = -speed_clamp
+	if(velocity.z > speed_clamp):
+		velocity.z = speed_clamp
+	elif(velocity.z < -speed_clamp):
+		velocity.z = -speed_clamp
+
+func wall_flow_state(speed_clamp, flow, norm, wall_normal, norm_speed): # flow_state override for wall running
+	if(gain_speed >= gain_speed_threshold): # change to flow state
+		velocity.x += -wall_normal.x * SPEED * delta
+		velocity.z += -wall_normal.z * SPEED * delta
+		gain_speed = gain_speed_threshold
+	else: # change to normal state
+		velocity.x = -wall_normal.x * norm_speed * delta
+		velocity.z = -wall_normal.z * norm_speed * delta
+
+	# speed limit code
+	if(velocity.x > speed_clamp):
+		velocity.x = speed_clamp
+	elif(velocity.x < -speed_clamp):
+		velocity.x = -speed_clamp
+	if(velocity.z > speed_clamp):
+		velocity.z = speed_clamp
+	elif(velocity.z < -speed_clamp):
+		velocity.z = -speed_clamp
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) # capture mouse
@@ -146,24 +185,7 @@ func _physics_process(delta):
 
 	# handles all basic movement types
 	if(is_sliding()): # sliding processes
-		if(gain_speed >= gain_speed_threshold): # change to flow state
-			emit_signal("state", "flow sliding")
-			velocity.x += direction.x * SPEED * delta
-			velocity.z += direction.z * SPEED * delta
-			gain_speed = gain_speed_threshold
-		else: # change to normal state
-			emit_signal("state", "sliding")
-			velocity.x = direction.x * SLIDE_SPEED * delta
-			velocity.z = direction.z * SLIDE_SPEED * delta
-		
-		if(velocity.x > 55):
-			velocity.x = 55
-		elif(velocity.x < -55):
-			velocity.x = -55
-		if(velocity.z > 55):
-			velocity.z = 55 
-		elif(velocity.z < -55):
-			velocity.z = -55
+		flow_state(55, "flow sliding", "sliding", SLIDE_SPEED)
 		
 	elif(is_crouched()): # crouching processes
 		emit_signal("state", "crouching")
@@ -171,24 +193,7 @@ func _physics_process(delta):
 		velocity.z = direction.z * CROUCH_SPEED * delta
 		
 	elif(is_sprinting()): # spriting processes
-		if(gain_speed >= gain_speed_threshold): # change to flow state
-			emit_signal("state", "flow sprinting")
-			velocity.x += direction.x * SPEED * delta
-			velocity.z += direction.z * SPEED * delta
-			gain_speed = gain_speed_threshold
-		else: # change to normal state
-			emit_signal("state", "sprinting")
-			velocity.x = direction.x * SPRINT_SPEED * delta
-			velocity.z = direction.z * SPRINT_SPEED * delta
-		
-		if(velocity.x > 25):
-			velocity.x = 25
-		elif(velocity.x < -25):
-			velocity.x = -25
-		if(velocity.z > 25):
-			velocity.z = 25
-		elif(velocity.z < -25):
-			velocity.z = -25
+		flow_state(25, "flow sprinting", "sprinting", SPRINT_SPEED)
 		
 	elif(direction): # walking processes
 		emit_signal("state", "walking")
@@ -221,15 +226,14 @@ func _physics_process(delta):
 		AbilityCD.start() # start CD
 	
 	if(is_on_wall() and wall_angle > 30 and wall_angle < 65): # wall running processes
-		if(direction): # emit signal for wall running
-			emit_signal("state", "wall running")
 		if(!direction): # emit signal for wall hanging
 			emit_signal("state", "wall hanging")
 		
-		var wall_normal = get_slide_collision(0).get_normal() # get the wall vectors
+		var wall_normal = get_slide_collision(0).get_normal() # get the wall normals
 		velocity.y = 0 # stop downward and upward movement
-		direction.x = -wall_normal.x * SPEED * delta # move in wall vector directions
-		direction.z = -wall_normal.z * SPEED * delta # move in wall vector directions
+		wall_flow_state(55, "flow wall running", "wall running", wall_normal, WALL_RUN_SPEED)
+		# direction.x = -wall_normal.x * SPEED * delta # move in wall vector directions
+		# direction.z = -wall_normal.z * SPEED * delta # move in wall vector directions
 	
 	slow_physics += 1
 	
