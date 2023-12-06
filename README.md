@@ -10,9 +10,10 @@ Current Features:
 - Camera Control
 - Basic Movement
 - Small Testing Map (Planned improvements)
+- Wall Running (Planned improvements)
+- Wall Jumping (Planned improvements)
 
 Planned Features:
-- Wall Running
 - Wall Climbing
 - Movement Animations
 - Basic Player Model
