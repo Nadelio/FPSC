@@ -212,12 +212,25 @@ func _physics_process(delta):
 		dash_count -= 1 # remove the ability to dash
 		AbilityCD.start() # start CD
 	
-	if(is_on_wall() and wall_angle > 30 and wall_angle < 65): # wall running processes (small bug that creates stuttered movement when looking around on a wall)
+	if(is_on_wall_only() and wall_angle > 30 and wall_angle < 65): # wall running processes (small bug that creates stuttered movement when looking around on a wall)
 		var wall_normal = get_slide_collision(0).get_normal() # update wall_normal
 		
 		velocity.y = 0 # stop downward and upward movement
 		
 		flow_state(55, "flow wall running", "wall running", wall_normal, WALL_RUN_SPEED, delta) # do wall running
+		
+		wall_jump(wall_normal, delta) # check for wall jump
+	elif(wall_angle < 30 and wall_angle > 65 and Input.is_action_pressed("move_forward")): # wall climbing process // BROKEN
+		var wall_normal = get_slide_collision(0).get_normal()
+		
+		emit_signal("state", "wall climbing")
+		
+		velocity.x = 0 # stop horizontal movement
+		velocity.z = 0 # stop horizontal movement
+		velocity.y = SPEED # vertical movement
+		
+		if(!DashCheck.is_colliding()):
+			position.y += 1
 		
 		wall_jump(wall_normal, delta) # check for wall jump
 	
